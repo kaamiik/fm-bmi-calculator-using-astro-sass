@@ -7,7 +7,7 @@ const { unit, unitName, label, id, name, notVisible = false } = Astro.props;
     >{unit}</span
   >
   <label aria-hidden="false" for={id} class={notVisible ? "not-visible" : ""}
-    >{label}<span class="visually-hidden">enter in {unitName}</span></label
+    ><span class="visually-hidden">{label} in {unitName}</span></label
   >
   <input type="number" name={name} id={id} placeholder="0" min="0" required />
 </div>
@@ -28,7 +28,7 @@ const { unit, unitName, label, id, name, notVisible = false } = Astro.props;
     & .unit {
       position: absolute;
       right: $size-6;
-      top: $size-10;
+      top: $size-6;
     }
   }
 
