@@ -29,7 +29,22 @@
 
   font-family: $heading-font-family;
   text-transform: $heading-text-transform;
-  letter-spacing: $heading-letter-spacing;
+  letter-spacing: calc($fs * $letter-spacing-loose);
   font-weight: $heading-font-weight;
   line-height: $heading-line-height;
+}
+
+@mixin flex(
+  $gap,
+  $align: stretch,
+  $fd: column,
+  $justify: flex-start,
+  $wrap: no-wrap
+) {
+  display: flex;
+  flex-direction: $fd;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+  flex-wrap: $wrap;
 }
