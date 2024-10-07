@@ -7,15 +7,19 @@
   <p>Enter your height and weight and you’ll see your BMI result here</p>
 </div>
 
-<div class="bmi-calculator__result | hidden">
-  <div aria-live="polite" aria-atomic="true">
+<div
+  aria-live="assertive"
+  aria-atomic="true"
+  class="bmi-calculator__result | hidden-2"
+>
+  <div>
     <p class="fw-semi-bold">Your BMI is...</p>
     <output class="js-output" name="result" for="height-metric weight-metric"
     ></output>
   </div>
-  <p aria-live="polite" aria-atomic="true" class="fs-300">
-    Your BMI suggests you're <span class="js-bmi-classification">...</span> Your
-    ideal weight is between <strong class="js-bmi-ideal-range">...</strong>
+  <p class="fs-300">
+    Your BMI suggests you're <span class="js-bmi-classification"></span> Your ideal
+    weight is between <strong class="js-bmi-ideal-range"></strong>
   </p>
 </div>
 
