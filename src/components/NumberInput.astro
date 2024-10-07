@@ -1,0 +1,66 @@
+---
+const { unit, unitName, label, id, name, notVisible = false } = Astro.props;
+---
+
+<div class="bmi-calculator__input">
+  <span aria-hidden="true" class="unit | fs-700 fw-semi-bold clr-primary-400"
+    >{unit}</span
+  >
+  <label aria-hidden="false" for={id} class={notVisible ? "not-visible" : ""}
+    >{label}<span class="visually-hidden">enter in {unitName}</span></label
+  >
+  <input type="number" name={name} id={id} placeholder="0" min="0" required />
+</div>
+
+<style lang="scss">
+  @use "../styles/abstracts/" as *;
+
+  .bmi-calculator__input {
+    position: relative;
+    flex-basis: 47%;
+    flex-grow: 100;
+    @include flex($size-2);
+
+    & > label {
+      font-size: $font-size-300;
+    }
+
+    & .unit {
+      position: absolute;
+      right: $size-6;
+      top: $size-10;
+    }
+  }
+
+  input[type="number"] {
+    background-color: $form-input-background-color;
+    border: $form-input-border-default;
+    border-radius: $form-input-border-radius;
+    cursor: pointer;
+    font-size: $form-input-font-size;
+    font-weight: $form-input-font-weight;
+    padding: $form-input-padding;
+    width: 100%;
+    transition:
+      250ms box-shadow ease-in-out,
+      250ms border ease-in-out;
+
+    &:hover {
+      border-color: $color-primary-400;
+    }
+    &:focus {
+      border-color: $color-primary-400;
+      box-shadow: 0 0 0 3px hsla(245, 100%, 82%, 0.8);
+      outline: 3px solid transparent;
+    }
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+</style>
