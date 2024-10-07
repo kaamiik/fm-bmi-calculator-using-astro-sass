@@ -1,0 +1,105 @@
+---
+
+---
+
+<section class="bmi-meaning | container" aria-labelledby="bmi-meaning-heading">
+  <div class="bmi-meaning__img--wrapper">
+    <img
+      class="bmi-meaning__img"
+      src="/assets/images/image-man-eating.webp"
+      alt="A person with white t-shirt, wearing a watch and holding chopsticks with a piece of sushi, standing against a light blue background."
+    />
+  </div>
+  <div class="bmi-meaning__info">
+    <h2 id="bmi-meaning-heading" class="heading-2">
+      What your BMI result means
+    </h2>
+    <p>
+      A BMI range of 18.5 to 24.9 is considered a 'healthy weight.' Maintaining
+      a healthy weight may lower your chances of experiencing health issues
+      later on, such as obesity and type 2 diabetes. Aim for a nutritious diet
+      with reduced fat and sugar content, incorporating ample fruits and
+      vegetables. Additionally, strive for regular physical activity, ideally
+      about 30 minutes daily for five days a week.
+    </p>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "../styles/abstracts/" as *;
+
+  .bmi-meaning {
+    display: grid;
+    gap: $size-12;
+
+    @include mq(medium) {
+      grid-template-columns: repeat(12, 1fr);
+      gap: $size-3;
+    }
+
+    @include mq(large) {
+      gap: $size-8;
+      margin-block-start: 10.75rem;
+    }
+
+    &__img--wrapper {
+      margin-inline: -24px;
+
+      @include mq(medium) {
+        margin-inline: 0;
+        grid-column: 1 / 8;
+        grid-row: 1;
+        transform: translateX(-24%);
+      }
+
+      @include mq(large) {
+        grid-column: 1 / 7;
+        transform: translateX(0);
+      }
+    }
+
+    &__img {
+      @include mq(medium) {
+        width: 435px;
+        height: 411px;
+        object-fit: cover;
+
+        @include mq(large) {
+          width: 564px;
+          height: 533px;
+        }
+      }
+    }
+
+    &__info {
+      @include flex($size-8);
+
+      & > h2 {
+        @include mq(large) {
+          position: relative;
+
+          &::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -250px;
+            background: url("/assets/images/pattern-curved-line-left.svg");
+            width: 85px;
+            height: 200px;
+          }
+        }
+      }
+
+      @include mq(medium) {
+        grid-column: 7 / -1;
+        grid-row: 1;
+        padding-block: $size-9;
+      }
+
+      @include mq(large) {
+        grid-column: 8 / -1;
+        padding-block: 11.5rem $size-10;
+      }
+    }
+  }
+</style>
