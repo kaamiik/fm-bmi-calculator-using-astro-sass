@@ -1,0 +1,55 @@
+---
+import BMIForm from "./BMIForm.astro";
+---
+
+<section
+  class="bmi-calculator | container"
+  aria-labelledby="bmi-calculator-heading"
+>
+  <div class="bmi-calculator__main">
+    <h1 id="bmi-calculator-heading" class="heading-1">
+      Body Mass Index Calculator
+    </h1>
+    <p>
+      Better understand your weight in relation to your height using our body
+      mass index (BM) calculator. While BMI is not the sole determinant of a
+      healthy weight, it offers a valuable starting point to evaluate your
+      overall health and well-being.
+    </p>
+  </div>
+  <BMIForm />
+</section>
+
+<style lang="scss">
+  @use "../styles/abstracts/" as *;
+  .bmi-calculator {
+    display: grid;
+    gap: $size-12;
+
+    @include mq(medium) {
+      gap: $size-10;
+    }
+
+    @include mq(large) {
+      grid-template-columns: repeat(12, 1fr);
+      gap: $size-8;
+    }
+
+    &__main {
+      @include flex($size-6, center);
+      text-align: center;
+
+      @include mq(large) {
+        grid-column: 1 / 6;
+        gap: $size-9;
+        align-self: center;
+        text-align: revert;
+      }
+
+      & > h1 {
+        max-width: 12ch;
+        margin-inline: auto;
+      }
+    }
+  }
+</style>
