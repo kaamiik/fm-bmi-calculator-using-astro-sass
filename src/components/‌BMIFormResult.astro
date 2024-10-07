@@ -1,0 +1,43 @@
+---
+
+---
+
+<div class="bmi-calculator__result">
+  <div aria-live="polite" aria-atomic="true">
+    <p class="fw-semi-bold">Your BMI is...</p>
+    <output class="js-output" name="result" for="height-metric weight-metric"
+    ></output>
+  </div>
+  <p aria-live="polite" aria-atomic="true" class="fs-300">
+    Your BMI suggests you're <span class="js-bmi-classification">...</span> Your
+    ideal weight is between <strong class="js-bmi-ideal-range">...</strong>
+  </p>
+</div>
+
+<style lang="scss">
+  @use "../styles/abstracts/" as *;
+
+  .bmi-calculator__result {
+    background-color: $color-primary-400;
+    border-radius: $border-radius-1;
+    color: $color-neutral-100;
+    @include flex($size-6);
+    padding: $size-8;
+
+    @include mq(medium) {
+      border-radius: 16px 90px 90px 16px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      & > * {
+        flex: 1;
+      }
+    }
+  }
+
+  output {
+    font-size: $font-size-900;
+    font-weight: $font-weight-semi-bold;
+  }
+</style>
