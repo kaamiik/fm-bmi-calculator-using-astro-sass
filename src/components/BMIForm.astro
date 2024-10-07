@@ -1,0 +1,270 @@
+---
+import RadioInput from "./RadioInput.astro";
+import NumberInput from "./NumberInput.astro";
+import BMIFormResult from "./‌BMIFormResult.astro";
+---
+
+<form action="#" class="bmi-calculator__details">
+  <fieldset>
+    <div class="bmi-calculator__radios">
+      <legend class="heading-3">Enter your details below</legend>
+      <div class="bmi-calculator__radios--wrapper">
+        <RadioInput unitType="metric" />
+        <RadioInput unitType="imperial" />
+      </div>
+    </div>
+  </fieldset>
+  <!-- Metric -->
+  <div class="bmi-calculator__inputs js-metric-inputs">
+    <NumberInput
+      unit="cm"
+      unitName="centimeter"
+      label="Height"
+      id="height-metric"
+      name="height-metric-cm"
+    />
+    <NumberInput
+      unit="kg"
+      unitName="kilogram"
+      label="Weight"
+      id="weight-metric"
+      name="weight-metric-kg"
+    />
+  </div>
+  <!-- Imperial -->
+  <div class="bmi-calculator__inputs js-imperial-inputs | hidden">
+    <div class="bmi-calculator__input--wrapper">
+      <NumberInput
+        unit="ft"
+        unitName="foot"
+        label="Height"
+        id="height-imperial-ft"
+        name="height-imperial-ft"
+      />
+      <NumberInput
+        unit="in"
+        unitName="inch"
+        label="Height"
+        id="height-imperial-in"
+        name="height-imperial-in"
+        notVisible="true"
+      />
+    </div>
+    <div class="bmi-calculator__input--wrapper">
+      <NumberInput
+        unit="st"
+        unitName="stone"
+        label="Weight"
+        id="weight-imperial-st"
+        name="weight-imperial-st"
+      />
+      <NumberInput
+        unit="lbs"
+        unitName="lbs"
+        label="Weight"
+        id="weight-imperial-lbs"
+        name="weight-imperial-lbs"
+        notVisible="true"
+      />
+    </div>
+  </div>
+  <BMIFormResult />
+
+  <script lang="js">
+    document.addEventListener("DOMContentLoaded", function () {
+      const metricInputs = document.querySelector(".js-metric-inputs");
+      const imperialInputs = document.querySelector(".js-imperial-inputs");
+      const radioInputs = document.querySelectorAll('input[type="radio"]');
+      const numberInputs = document.querySelectorAll('input[type="number"]');
+      const bmiOutput = document.querySelector(".js-output");
+      const bmiClassification = document.querySelector(
+        ".js-bmi-classification"
+      );
+      const bmiIdealRange = document.querySelector(".js-bmi-ideal-range");
+
+      let heightCentimeterValue = 0;
+      let heightFootValue = 0;
+      let heightInchValue = 0;
+      let weightKilogramValue = 0;
+      let weightStoneValue = 0;
+      let weightLbsValue = 0;
+      let bmi = 0;
+      let weightMin = 0;
+      let weightMax = 0;
+
+      const resetForm = () => {
+        radioInputs[0].checked = true;
+        numberInputs.forEach((input) => (input.value = ""));
+      };
+
+      const handleRadios = (radio) => {
+        if (radio.value === "metric") {
+          bmiOutput.for = "height-metric weight-metric";
+          metricInputs.classList.remove("hidden");
+          imperialInputs.classList.add("hidden");
+        } else {
+          metricInputs.classList.add("hidden");
+          imperialInputs.classList.remove("hidden");
+        }
+      };
+
+      const calculateMetricBMI = () => {
+        if (heightCentimeterValue > 0 && weightKilogramValue > 0) {
+          bmiOutput.for = "height-metric weight-metric";
+          bmi = (
+            weightKilogramValue /
+            (heightCentimeterValue / 100) ** 2
+          ).toFixed(2);
+          bmiOutput.textContent = bmi;
+          classifyBMI(bmi);
+          setIdealRangeMetric();
+        }
+      };
+
+      const calculateImperialBMI = () => {
+        if (heightInchValue > 0 && weightLbsValue > 0) {
+          bmiOutput.for =
+            "height-imperial-ft height-imperial-in weight-imperial-st weight-imperial-lbs";
+          let totalHeightInInches = heightFootValue * 12 + heightInchValue;
+          let totalWeightInLbs = weightStoneValue * 14 + weightLbsValue;
+          bmi = ((totalWeightInLbs / totalHeightInInches ** 2) * 703).toFixed(
+            2
+          );
+          bmiOutput.textContent = bmi;
+          classifyBMI(bmi);
+          setIdealRangeImperial(totalHeightInInches);
+        }
+      };
+
+      const classifyBMI = (bmi) => {
+        let classification;
+        switch (true) {
+          case bmi < 18.5:
+            classification = "an underweight";
+            break;
+          case bmi >= 18.5 && bmi < 24.99:
+            classification = "a healthy weight";
+            break;
+          case bmi >= 24.99 && bmi < 30:
+            classification = "an overweight";
+            break;
+          case bmi >= 30:
+            classification = "an obese";
+            break;
+          default:
+            classification = "an unknown classification";
+        }
+        bmiClassification.textContent = classification;
+      };
+
+      const setIdealRangeMetric = () => {
+        weightMin = (18.5 * (heightCentimeterValue / 100) ** 2).toFixed(1);
+        weightMax = (24.9 * (heightCentimeterValue / 100) ** 2).toFixed(1);
+        bmiIdealRange.textContent = `${weightMin}kgs - ${weightMax}kgs.`;
+      };
+
+      const setIdealRangeImperial = (totalHeightInInches) => {
+        weightMin = ((18.5 * totalHeightInInches ** 2) / 703).toFixed(1);
+        weightMax = ((24.9 * totalHeightInInches ** 2) / 703).toFixed(1);
+        let weightMinSt = Math.floor(weightMin / 14);
+        let weightMinLbs = Math.floor(weightMin % 14);
+        let weightMaxSt = Math.floor(weightMax / 14);
+        let weightMaxLbs = Math.floor(weightMax % 14);
+        bmiIdealRange.textContent = `${weightMinSt}st ${weightMinLbs}lbs - ${weightMaxSt}st ${weightMaxLbs}lbs.`;
+      };
+
+      const handleNumberInputChange = (input) => {
+        if (radioInputs[0].checked) {
+          if (input.name === "height-metric-cm") {
+            heightCentimeterValue = parseFloat(input.value) || 0;
+          } else if (input.name === "weight-metric-kg") {
+            weightKilogramValue = parseFloat(input.value) || 0;
+          }
+          calculateMetricBMI();
+        } else {
+          if (input.name === "height-imperial-ft") {
+            heightFootValue = parseFloat(input.value) || 0;
+          } else if (input.name === "height-imperial-in") {
+            heightInchValue = parseFloat(input.value) || 0;
+          } else if (input.name === "weight-imperial-st") {
+            weightStoneValue = parseFloat(input.value) || 0;
+          } else if (input.name === "weight-imperial-lbs") {
+            weightLbsValue = parseFloat(input.value) || 0;
+          }
+          calculateImperialBMI();
+        }
+      };
+
+      resetForm();
+      handleRadios(radioInputs[0]);
+
+      radioInputs.forEach((radio) => {
+        radio.addEventListener("change", () => handleRadios(radio));
+      });
+
+      numberInputs.forEach((input) => {
+        input.addEventListener("change", () => handleNumberInputChange(input));
+      });
+    });
+  </script>
+
+  <style lang="scss">
+    @use "../styles/abstracts/" as *;
+
+    .bmi-calculator {
+      &__details {
+        background-color: $color-neutral-100;
+        box-shadow: $box-shadow-1;
+        border-radius: $border-radius-1;
+        @include flex($size-6);
+        padding: $size-6;
+
+        @include mq(medium) {
+          gap: $size-8;
+          padding: $size-8;
+        }
+
+        @include mq(large) {
+          grid-column: 7 / -1;
+        }
+      }
+
+      &__radios {
+        @include flex($size-6);
+
+        @include mq(medium) {
+          gap: $size-8;
+        }
+      }
+
+      &__radios--wrapper {
+        @include flex($size-6, $align: center, $wrap: wrap, $fd: row);
+        font-weight: $font-weight-semi-bold;
+      }
+
+      &__inputs {
+        @include flex($size-4);
+
+        @include mq(medium) {
+          flex-direction: row;
+          gap: $size-6;
+        }
+      }
+
+      &__inputs:has(.bmi-calculator__input--wrapper) {
+        @include flex($size-4);
+        @include mq(medium) {
+          flex-direction: column;
+          gap: $size-6;
+        }
+      }
+      &__input--wrapper {
+        @include flex($size-4, $align: center, $fd: row, $wrap: wrap);
+
+        @include mq(medium) {
+          gap: $size-6;
+        }
+      }
+    }
+  </style>
+</form>
