@@ -81,6 +81,10 @@ import BMIFormResult from "./‌BMIFormResult.astro";
         ".js-bmi-classification"
       );
       const bmiIdealRange = document.querySelector(".js-bmi-ideal-range");
+      const resultEmpty = document.querySelector(
+        ".bmi-calculator__result--empty"
+      );
+      const result = document.querySelector(".bmi-calculator__result");
 
       let heightCentimeterValue = 0;
       let heightFootValue = 0;
@@ -95,6 +99,8 @@ import BMIFormResult from "./‌BMIFormResult.astro";
       const resetForm = () => {
         radioInputs[0].checked = true;
         numberInputs.forEach((input) => (input.value = ""));
+        resultEmpty.classList.remove("hidden");
+        result.classList.add("hidden");
       };
 
       const handleRadios = (radio) => {
@@ -118,6 +124,8 @@ import BMIFormResult from "./‌BMIFormResult.astro";
           bmiOutput.textContent = bmi;
           classifyBMI(bmi);
           setIdealRangeMetric();
+          resultEmpty.classList.add("hidden");
+          result.classList.remove("hidden");
         }
       };
 
@@ -133,6 +141,8 @@ import BMIFormResult from "./‌BMIFormResult.astro";
           bmiOutput.textContent = bmi;
           classifyBMI(bmi);
           setIdealRangeImperial(totalHeightInInches);
+          resultEmpty.classList.add("hidden");
+          result.classList.remove("hidden");
         }
       };
 
