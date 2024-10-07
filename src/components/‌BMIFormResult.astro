@@ -2,7 +2,12 @@
 
 ---
 
-<div class="bmi-calculator__result">
+<div class="bmi-calculator__result--empty">
+  <p class="fs-700 fw-semi-bold">Welcome!</p>
+  <p>Enter your height and weight and you’ll see your BMI result here</p>
+</div>
+
+<div class="bmi-calculator__result | hidden">
   <div aria-live="polite" aria-atomic="true">
     <p class="fw-semi-bold">Your BMI is...</p>
     <output class="js-output" name="result" for="height-metric weight-metric"
@@ -16,6 +21,20 @@
 
 <style lang="scss">
   @use "../styles/abstracts/" as *;
+
+  .bmi-calculator__result--empty {
+    background-color: $color-primary-400;
+    border-radius: $border-radius-1;
+    color: $color-neutral-100;
+    @include flex($size-4);
+    padding: $size-8;
+    @include mq(medium) {
+      border-radius: 16px 90px 90px 16px;
+      & > * {
+        flex: 1;
+      }
+    }
+  }
 
   .bmi-calculator__result {
     background-color: $color-primary-400;
