@@ -123,36 +123,6 @@ import BMIFormResult from "./‌BMIFormResult.astro";
       }
     };
 
-    const calculateMetricBMI = () => {
-      if (heightCentimeterValue > 0 && weightKilogramValue > 0) {
-        bmiOutput.for = "height-metric weight-metric";
-        bmi = (
-          weightKilogramValue /
-          (heightCentimeterValue / 100) ** 2
-        ).toFixed(2);
-        bmiOutput.textContent = bmi;
-        classifyBMI(bmi);
-        setIdealRangeMetric();
-        resultEmpty.classList.add("hidden-2");
-        result.classList.remove("hidden-2");
-      }
-    };
-
-    const calculateImperialBMI = () => {
-      if (heightInchValue > 0 && weightLbsValue > 0) {
-        bmiOutput.for =
-          "height-imperial-ft height-imperial-in weight-imperial-st weight-imperial-lbs";
-        let totalHeightInInches = heightFootValue * 12 + heightInchValue;
-        let totalWeightInLbs = weightStoneValue * 14 + weightLbsValue;
-        bmi = ((totalWeightInLbs / totalHeightInInches ** 2) * 703).toFixed(2);
-        bmiOutput.textContent = bmi;
-        classifyBMI(bmi);
-        setIdealRangeImperial(totalHeightInInches);
-        resultEmpty.classList.add("hidden-2");
-        result.classList.remove("hidden-2");
-      }
-    };
-
     const classifyBMI = (bmi) => {
       let classification;
       switch (true) {
@@ -188,6 +158,63 @@ import BMIFormResult from "./‌BMIFormResult.astro";
       let weightMaxSt = Math.floor(weightMax / 14);
       let weightMaxLbs = Math.floor(weightMax % 14);
       bmiIdealRange.textContent = `${weightMinSt}st ${weightMinLbs}lbs - ${weightMaxSt}st ${weightMaxLbs}lbs.`;
+    };
+
+    const updateBMIResult = (bmi, classification, weightMin, weightMax) => {
+      result.setAttribute("aria-live", "off"); // Temporarily disable aria-live
+
+      bmiOutput.textContent = bmi;
+      bmiClassification.textContent = classification;
+      bmiIdealRange.textContent = `${weightMin} - ${weightMax}`;
+
+      setTimeout(() => {
+        result.setAttribute("aria-live", "polite");
+      }, 50);
+    };
+
+    const calculateMetricBMI = () => {
+      if (heightCentimeterValue > 0 && weightKilogramValue > 0) {
+        bmi = (
+          weightKilogramValue /
+          (heightCentimeterValue / 100) ** 2
+        ).toFixed(2);
+
+        classifyBMI(bmi);
+        setIdealRangeMetric();
+
+        // Use centralized function to update result
+        updateBMIResult(
+          bmi,
+          bmiClassification.textContent,
+          weightMin,
+          weightMax
+        );
+
+        resultEmpty.classList.add("hidden-2");
+        result.classList.remove("hidden-2");
+      }
+    };
+
+    const calculateImperialBMI = () => {
+      if (heightInchValue > 0 && weightLbsValue > 0) {
+        let totalHeightInInches = heightFootValue * 12 + heightInchValue;
+        let totalWeightInLbs = weightStoneValue * 14 + weightLbsValue;
+        bmi = ((totalWeightInLbs / totalHeightInInches ** 2) * 703).toFixed(2);
+
+        classifyBMI(bmi);
+        setIdealRangeImperial(totalHeightInInches);
+
+        // Use centralized function to update result
+        updateBMIResult(
+          bmi,
+          bmiClassification.textContent,
+          weightMin,
+          weightMax
+        );
+
+        resultEmpty.classList.add("hidden-2");
+        result.classList.remove("hidden-2");
+      }
     };
 
     const handleNumberInputChange = (input) => {
