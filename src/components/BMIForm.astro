@@ -104,6 +104,7 @@ import BMIFormResult from "./‌BMIFormResult.astro";
     let bmi = 0;
     let weightMin = 0;
     let weightMax = 0;
+    let weightRange = "";
 
     const resetForm = () => {
       radioInputs[0].checked = true;
@@ -147,7 +148,7 @@ import BMIFormResult from "./‌BMIFormResult.astro";
     const setIdealRangeMetric = () => {
       weightMin = (18.5 * (heightCentimeterValue / 100) ** 2).toFixed(1);
       weightMax = (24.9 * (heightCentimeterValue / 100) ** 2).toFixed(1);
-      bmiIdealRange.textContent = `${weightMin}kgs - ${weightMax}kgs.`;
+      weightRange = `${weightMin}kgs - ${weightMax}kgs.`;
     };
 
     const setIdealRangeImperial = (totalHeightInInches) => {
@@ -157,19 +158,19 @@ import BMIFormResult from "./‌BMIFormResult.astro";
       let weightMinLbs = Math.floor(weightMin % 14);
       let weightMaxSt = Math.floor(weightMax / 14);
       let weightMaxLbs = Math.floor(weightMax % 14);
-      bmiIdealRange.textContent = `${weightMinSt}st ${weightMinLbs}lbs - ${weightMaxSt}st ${weightMaxLbs}lbs.`;
+      weightRange = `${weightMinSt}st ${weightMinLbs}lbs - ${weightMaxSt}st ${weightMaxLbs}lbs.`;
     };
 
-    const updateBMIResult = (bmi, classification, weightMin, weightMax) => {
-      result.setAttribute("aria-live", "off"); // Temporarily disable aria-live
+    const updateBMIResult = () => {
+      result.setAttribute("aria-live", "off");
 
       bmiOutput.textContent = bmi;
-      bmiClassification.textContent = classification;
-      bmiIdealRange.textContent = `${weightMin} - ${weightMax}`;
+      bmiClassification.textContent = bmiClassification.textContent;
+      bmiIdealRange.textContent = weightRange;
 
       setTimeout(() => {
         result.setAttribute("aria-live", "polite");
-      }, 50);
+      }, 500);
     };
 
     const calculateMetricBMI = () => {
@@ -182,13 +183,7 @@ import BMIFormResult from "./‌BMIFormResult.astro";
         classifyBMI(bmi);
         setIdealRangeMetric();
 
-        // Use centralized function to update result
-        updateBMIResult(
-          bmi,
-          bmiClassification.textContent,
-          weightMin,
-          weightMax
-        );
+        updateBMIResult();
 
         resultEmpty.classList.add("hidden-2");
         result.classList.remove("hidden-2");
@@ -204,13 +199,7 @@ import BMIFormResult from "./‌BMIFormResult.astro";
         classifyBMI(bmi);
         setIdealRangeImperial(totalHeightInInches);
 
-        // Use centralized function to update result
-        updateBMIResult(
-          bmi,
-          bmiClassification.textContent,
-          weightMin,
-          weightMax
-        );
+        updateBMIResult();
 
         resultEmpty.classList.add("hidden-2");
         result.classList.remove("hidden-2");
