@@ -4,11 +4,11 @@
 
 <div class="bmi-calculator__result--empty">
   <p class="fs-700 fw-semi-bold">Welcome!</p>
-  <p>Enter your height and weight and you’ll see your BMI result here</p>
+  <p>Enter your height and weight and you’ll see your BMI result here.</p>
 </div>
 
 <div
-  aria-live="assertive"
+  aria-live="polite"
   aria-atomic="true"
   class="bmi-calculator__result | hidden-2"
 >
@@ -23,7 +23,7 @@
   </p>
 </div>
 
-<style lang="scss">
+<style is:global lang="scss">
   @use "../styles/abstracts/" as *;
 
   .bmi-calculator__result--empty {
